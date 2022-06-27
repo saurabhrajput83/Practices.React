@@ -31,7 +31,7 @@ function ShoppingCarts(props) {
                     {lineItems.map((item)=>{
                         return <tr key={item.lineItemId}>
                             <td>  
-                                <img className='micro-image' src={item.product.productImageUrl} 
+                                <img className='micro-image' src={'images/'+item.product.productImageUrl} 
                                 alt={item.product.productName}></img>
                             </td>
                             <td>{item.product.productName}</td>

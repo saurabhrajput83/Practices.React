@@ -17,7 +17,8 @@ function Products(props) {
                                         <div>{item.productName}</div>
                                     </div>
                                     <div className='card-body'>
-                                        <img className='small-image' src={item.productImageUrl} alt={item.productName}></img>
+                                        <img className='small-image' 
+                                        src={'images/'+item.productImageUrl} alt={item.productName}></img>
                                         <div><strong>Description:</strong> {item.productDescription}</div>
                                         <div><strong>List Price:</strong> {item.listPrice}</div>
                                         <div><strong>Selling Price:</strong> {item.sellingPrice}</div>

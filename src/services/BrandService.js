@@ -1,52 +1,54 @@
+import {requestDefaults} from './baseService';
 import Config from '../AppSettings';
 
 export var getAllBrands = function() {
-    var apiUrl = Config.baseUrl + 'Brand/GetAllBrands';
+    var apiUrl = Config.baseApiUrl + 'Brand/GetAllBrands';
+
     return fetch(apiUrl, {
         method: "GET",
-        rejectUnauthorized: false
+        headers: requestDefaults.headers
     });
 };
 
 export var getAllActiveBrands = function() {
-    var apiUrl = Config.baseUrl + 'Brand/GetAllActiveBrands';
-    return fetch(apiUrl);
+    var apiUrl = Config.baseApiUrl + 'Brand/GetAllActiveBrands';
+    return fetch(apiUrl, {
+        method: "GET",
+        headers: requestDefaults.headers
+    });
 };
 
 export var getBrandById = function(id) {
-    var apiUrl = Config.baseUrl + 'Brand/GetBrandById/'+id;
-    return fetch(apiUrl);
+    var apiUrl = Config.baseApiUrl + 'Brand/GetBrandById/'+id;
+    return fetch(apiUrl, {
+        method: "GET",
+        headers: requestDefaults.headers
+    });
 };
 
 export var addBrand = function(brandModel) {
-    var apiUrl = Config.baseUrl + 'Brand/InsertBrand';
+    var apiUrl = Config.baseApiUrl + 'Brand/InsertBrand';
     return fetch(apiUrl,{
         method: 'POST',
-        headers:{
-            'Content-Type': 'application/json'
-        },
+        headers: requestDefaults.headers,
         body: JSON.stringify(brandModel)
     });
 };
 
 export var updateBrand = function(brandModel) {
-    var apiUrl = Config.baseUrl + 'Brand/UpdateBrand';
+    var apiUrl = Config.baseApiUrl + 'Brand/UpdateBrand';
     return fetch(apiUrl,{
         method: 'PUT',
-        headers:{
-            'Content-Type': 'application/json'
-        },
+        headers: requestDefaults.headers,
         body: JSON.stringify(brandModel)
     });
 }
 
 export var deleteBrand = function(id) {
-    var apiUrl = Config.baseUrl + 'Brand/DeleteBrand?id='+id;
+    var apiUrl = Config.baseApiUrl + 'Brand/DeleteBrand?id='+id;
     return fetch(apiUrl,{
         method: 'DELETE',
-        headers:{
-            'Content-Type': 'application/json'
-        }
+        headers: requestDefaults.headers
     });
 }
 

@@ -1,52 +1,53 @@
+import {requestDefaults} from './baseService';
 import Config from '../AppSettings';
 
 export var getAllProducts = function() {
-    var apiUrl = Config.baseUrl + 'Product/GetAllProducts';
+    var apiUrl = Config.baseApiUrl + 'Product/GetAllProducts';
     return fetch(apiUrl, {
         method: "GET",
-        rejectUnauthorized: false
+        headers: requestDefaults.headers
     });
 };
 
 export var getAllActiveProducts = function() {
-    var apiUrl = Config.baseUrl + 'Product/GetAllActiveProducts';
-    return fetch(apiUrl);
+    var apiUrl = Config.baseApiUrl + 'Product/GetAllActiveProducts';
+    return fetch(apiUrl, {
+        method: "GET",
+        headers: requestDefaults.headers
+    });
 };
 
 export var getProductById = function(id) {
-    var apiUrl = Config.baseUrl + 'Product/GetProductById/'+id;
-    return fetch(apiUrl);
+    var apiUrl = Config.baseApiUrl + 'Product/GetProductById/'+id;
+    return fetch(apiUrl, {
+        method: "GET",
+        headers: requestDefaults.headers
+    });
 };
 
 export var addProduct = function(productModel) {
-    var apiUrl = Config.baseUrl + 'Product/InsertProduct';
+    var apiUrl = Config.baseApiUrl + 'Product/InsertProduct';
     return fetch(apiUrl,{
         method: 'POST',
-        headers:{
-            'Content-Type': 'application/json'
-        },
+        headers: requestDefaults.headers,
         body: JSON.stringify(productModel)
     });
 };
 
 export var updateProduct = function(productModel) {
-    var apiUrl = Config.baseUrl + 'Product/UpdateProduct';
+    var apiUrl = Config.baseApiUrl + 'Product/UpdateProduct';
     return fetch(apiUrl,{
         method: 'PUT',
-        headers:{
-            'Content-Type': 'application/json'
-        },
+        headers: requestDefaults.headers,
         body: JSON.stringify(productModel)
     });
 }
 
 export var deleteProduct = function(id) {
-    var apiUrl = Config.baseUrl + 'Product/DeleteProduct?id='+id;
+    var apiUrl = Config.baseApiUrl + 'Product/DeleteProduct?id='+id;
     return fetch(apiUrl,{
         method: 'DELETE',
-        headers:{
-            'Content-Type': 'application/json'
-        }
+        headers: requestDefaults.headers
     });
 }
 

@@ -1,7 +1,8 @@
+import {requestDefaults} from './baseService';
 import Config from '../AppSettings';
 
 export var getAllLineItems = function() {
-    var apiUrl = Config.baseUrl + 'LineItem/GetAllLineItems';
+    var apiUrl = Config.baseApiUrl + 'LineItem/GetAllLineItems';
     return fetch(apiUrl, {
         method: "GET",
         rejectUnauthorized: false
@@ -9,44 +10,44 @@ export var getAllLineItems = function() {
 };
 
 export var getAllLineItemsByShoppingCartId = function(shoppingCartId) {
-    var apiUrl = Config.baseUrl + 'LineItem/getAllLineItemsByShoppingCartId?shoppingCartId='+shoppingCartId;;
-    return fetch(apiUrl);
+    var apiUrl = Config.baseApiUrl + 'LineItem/getAllLineItemsByShoppingCartId?shoppingCartId='+shoppingCartId;;
+    return fetch(apiUrl, {
+        method: "GET",
+        headers: requestDefaults.headers
+    });
 };
 
 export var getLineItemById = function(id) {
-    var apiUrl = Config.baseUrl + 'LineItem/GetLineItemById/'+id;
-    return fetch(apiUrl);
+    var apiUrl = Config.baseApiUrl + 'LineItem/GetLineItemById/'+id;
+    return fetch(apiUrl, {
+        method: "GET",
+        headers: requestDefaults.headers
+    });
 };
 
 export var addLineItem = function(lineItemModel) {
-    var apiUrl = Config.baseUrl + 'LineItem/InsertLineItem';
-    return fetch(apiUrl,{
+    var apiUrl = Config.baseApiUrl + 'LineItem/InsertLineItem';
+    return fetch(apiUrl, {
         method: 'POST',
-        headers:{
-            'Content-Type': 'application/json'
-        },
+        headers: requestDefaults.headers,
         body: JSON.stringify(lineItemModel)
     });
 };
 
 export var updateLineItem = function(lineItemModel) {
-    var apiUrl = Config.baseUrl + 'LineItem/UpdateLineItem';
-    return fetch(apiUrl,{
-        method: 'PUT',
-        headers:{
-            'Content-Type': 'application/json'
-        },
+    var apiUrl = Config.baseApiUrl + 'LineItem/UpdateLineItem';
+    return fetch(apiUrl, {
+        method: 'PUT', 
+        headers: requestDefaults.headers,
         body: JSON.stringify(lineItemModel)
     });
 }
 
 export var deleteLineItem = function(id) {
-    var apiUrl = Config.baseUrl + 'LineItem/DeleteLineItem?id='+id;
-    return fetch(apiUrl,{
+    var apiUrl = Config.baseApiUrl + 'LineItem/DeleteLineItem?id='+id;
+    return fetch(apiUrl, {
         method: 'DELETE',
-        headers:{
-            'Content-Type': 'application/json'
-        }
+        headers: requestDefaults.headers
     });
 }
 
