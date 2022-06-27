@@ -1,139 +1,58 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux/es/exports'; 
 import Brands from './Brands';
-import AddEditBrand from './AddEditBrand';
-import * as brandService from '../../services/BrandService';
+import * as brandActionCreators from '../../state-redux/actionCreators/brandActionCreators';
+import { bindActionCreators } from 'redux';
+import actionTypes from '../../state-redux/actionCreators/actionTypes';
 
-class BrandManagerClass extends React.Component {
+function BrandManager(props) {
 
-    defaultBrand = {
-        brandId: 0,
-        brandName: '',
-        brandDescription: '',
-        isActive: false
-    };
+    const brandStore = useSelector((appStore)=> appStore.brand);
+    const dispatch = useDispatch();
+    let {deleteBrandActionCreator, getAllBrandsActionCreator} = 
+    bindActionCreators(brandActionCreators, dispatch);
 
-    constructor(props){
-        console.log("BrandManager constructor");
-        super(props);
-        this.state= {
-            brand:this.defaultBrand,
-            brands:[]
-        };
-    };
-    
-    componentDidMount(){
-        console.log("BrandManager componentDidMount");
-        this.loadBrands();
-        
-    };
+    console.log("BrandManager Component init ", props, brandStore);
 
-    componentDidUpdate(){
-        console.log("BrandManager componentDidUpdate");
-    };
+    useEffect(()=>{
+        console.log("BrandManager Component useEffect");
+        getAllBrandsActionCreator();
+    },[]);
 
-    componentWillUnmount(){
-        console.log("BrandManager componentWillUnmount");
-    };
-
-    loadBrands = () => {
-        console.log("BrandManager loadBrands");
-        
-        brandService
-        .getAllBrands()
-        .then((response)=> response.json())
-        .then((data)=> {
-            console.log("BrandManager loadBrands data", data)
-            this.setState({brands:data});
-        })
-        .catch((error)=>console.log(error));
-    };
-   
-    addBrand = (event)=> {
-        //brandId
+    const addBrand = (event)=> {
         console.log("BrandManager addBrand", event);
-        this.setState({brand: this.defaultBrand});
-        document.getElementById("divAddEditBrandModalOpen").click();
-        
+        props.navigation('/addbrand');
     };
 
-    editBrand = (event)=> {
+    const editBrand = (event)=> {
         //brandId
         console.log("BrandManager editBrand", event);
         let brandId = parseInt(event.target.id);
-        brandService
-        .getBrandById(brandId)
-        .then((response)=>response.json())
-        .then((data)=> {
-            this.setState({brand : data});
-            document.getElementById("divAddEditBrandModalOpen").click();
-        });
+        props.navigation('/editbrand?id='+brandId);
     };
 
-    deleteBrand = (event)=> {
+    const deleteBrand = (event)=> {
         //brandId
         console.log("BrandManager deleteBrand", event);
         let brandId = parseInt(event.target.id);
-        brandService
-        .deleteBrand(brandId)
-        .then((response)=> {
-            this.loadBrands();
-        })
-        .catch((error)=> console.log(error));
+        deleteBrandActionCreator(brandId, getAllBrandsActionCreator);
+        
     };
 
-    createUpdateBrand = (event, values)=> {
-        console.log("BrandManager createUpdateBrand", event, values);
-        if(values.brandId > 0) {
-            brandService
-            .updateBrand(values)
-            .then((response)=> {
-                this.loadBrands();
-                document.getElementById("divAddEditBrandModalClose").click();   
-            })
-            .catch((error)=> console.log(error));
-        } else {
-            brandService
-            .addBrand(values)
-            .then((response)=> {
-                this.loadBrands();
-                document.getElementById("divAddEditBrandModalClose").click();   
-            })
-            .catch((error)=> console.log(error));
-        }
-    };
-
-    render() {
-        return (
-            <>
-                <div className='container mt-3'>
-                    <h4 className='bg-light p-2 rounded'>
-                        Brands
-                    </h4>
-                    <p>
-                        <button type="button" className='btn btn-primary' onClick={this.addBrand}>Add New Brand</button>
-                        <button type="button" className='btn btn-primary invisible' id='divAddEditBrandModalOpen' data-bs-toggle="modal" data-bs-target="#divAddEditBrandModal">Add New Brand</button>
-                    </p>
-                    <Brands brands={this.state.brands} editBrand={this.editBrand} deleteBrand={this.deleteBrand} />
-                </div>
-                <div className="modal fade" id="divAddEditBrandModal">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                Add/Edit Brand
-                            </div>
-                            <div className="modal-body">
-                                <AddEditBrand values={this.state.brand} createUpdateHandler={this.createUpdateBrand}/>
-                            </div>
-                            <div className="modal-footer">
-                                <button id="divAddEditBrandModalClose" type="button" className="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </>
-        );
-    };
-
+    return (
+        <>
+            <div className='container mt-3'>
+                <h4 className='bg-light p-2 rounded'>
+                    Brands
+                </h4>
+                <p>
+                    <button type="button" className='btn btn-primary' onClick={addBrand}>Add New Brand</button>
+                </p>
+                {brandStore.brands && brandStore.brands.length > 0 &&
+                <Brands brands={brandStore.brands} editBrand={editBrand} deleteBrand={deleteBrand} />}
+            </div>
+        </>
+    );
 };
 
-export default BrandManagerClass;
+export default BrandManager;

@@ -8,7 +8,7 @@ function ShoppingCarts(props) {
     
     useEffect(()=>{
         console.log("ShoppingCarts Component useEffect");
-    },[props.lineItems]);
+    },[]);
     
     var calculateSubTotal = (item) => {
         return parseFloat(item.quantity * item.product.sellingPrice);
@@ -16,7 +16,7 @@ function ShoppingCarts(props) {
 
     return (
         <>
-            {lineItems.length>0 ? 
+            {lineItems && lineItems.length>0 ? 
             <table className='table table-stripped'>
                 <thead>
                     <tr>
@@ -28,7 +28,7 @@ function ShoppingCarts(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {lineItems && lineItems.length>0 && lineItems.map((item)=>{
+                    {lineItems.map((item)=>{
                         return <tr key={item.lineItemId}>
                             <td>  
                                 <img className='micro-image' src={item.product.productImageUrl} 

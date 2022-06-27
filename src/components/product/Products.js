@@ -6,16 +6,12 @@ function Products(props) {
 
     const products = props.products;
     
-    useEffect(()=>{
-        console.log("Products Component useEffect");
-    },[props.products]);
-    
     return (
         <>
-            {products.length>0 ? 
+            {(products && products.length>0) ? 
             <div className='row'>
-                {products && products.length>0 && products.map((item)=>{
-                    return <div className='col-md-3' key={item.productId}>
+                {products.map((item)=>{
+                return      <div className='col-md-3' key={item.productId}>
                                 <div className='card'>
                                     <div className='card-header'>
                                         <div>{item.productName}</div>
@@ -38,10 +34,10 @@ function Products(props) {
                                         id={item.productId}>Delete</button>
                                     </div>
                                 </div>
-                            </div>;
-                    })}
-            </div>: 
-            <h4 className='text-danger'>No Products found.</h4>}
+                            </div>
+                        
+            })}
+            </div>: <h4 className='text-danger'>No Products found.</h4>}
         </>
     );
 };

@@ -1,50 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import {bindActionCreators} from 'redux';
+import {useSelector, useDispatch} from 'react-redux';
 import ShoppingCarts from './ShoppingCarts';
-import * as lineItemService from '../../services/LineItemService';
-import * as shoppingCartService from '../../services/ShoppingCartService';
+import * as shoppingCartActionCreators from '../../state-redux/actionCreators/shoppingCartActionCreators';
 
 
 function ShoppingCartManager(props) {
 
-    const [shoppingcart, setShoppingcart]  = useState([]);
+    const shoppingCartStore = useSelector((appStore)=> appStore.shoppingCart);
+
+    const dispatch = useDispatch();
+    let {getAllLineItemsByShoppingCartIdActionCreator, deleteLineItemActionCreator} 
+    = bindActionCreators(shoppingCartActionCreators, dispatch);
+
+    console.log("ShoppingCartManager Component init", props, shoppingCartStore);
 
     useEffect(()=> {
         console.log("ShoppingCartManager useEffect");
-        loadShoppingcart();
+        if(localStorage.getItem("shoppingCartId")){
+            getAllLineItemsByShoppingCartIdActionCreator(localStorage.getItem("shoppingCartId"));
+        }
     }, []);
 
-    const loadShoppingcart = () => {
-        console.log("ShoppingCartManager loadLineItems");
-        let shoppingCartId = 0;
-        if(localStorage.getItem("shoppingCartId"))
-            shoppingCartId = parseInt(localStorage.getItem("shoppingCartId"));
-
-        if(shoppingCartId > 0) {
-            lineItemService
-            .getAllLineItemsByShoppingCartId(shoppingCartId)
-            .then((response)=> response.json())
-            .then((data)=> {
-                console.log("ShoppingCartManager loadShoppingcart data", data)
-                setShoppingcart(data);
-            })
-            .catch((error)=>console.log(error));
-        } else {
-
-        }
-    };
+   
    
     const deleteLineItem = (event)=> {
 
         console.log("ShoppingCartManager deleteLineItem", event);
         let lineItemId = parseInt(event.target.id);
-        lineItemService
-        .deleteLineItem(lineItemId)
-        .then((response)=> {
-            loadShoppingcart();
+        deleteLineItemActionCreator(lineItemId, ()=>{
+            getAllLineItemsByShoppingCartIdActionCreator(localStorage.getItem("shoppingCartId"))
         })
-        .catch((error)=> console.log(error));
+       
     };
-    
 
     return (
         <>
@@ -52,7 +40,7 @@ function ShoppingCartManager(props) {
                 <h4 className='bg-light p-2 rounded'>
                     Your Shopping Cart
                 </h4>
-                <ShoppingCarts lineItems={shoppingcart} deleteLineItem = {deleteLineItem} />
+                <ShoppingCarts lineItems={shoppingCartStore.lineItems} deleteLineItem = {deleteLineItem} />
             </div>
         </>
     );

@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 
 function Brands(props) {
 
@@ -6,13 +6,9 @@ function Brands(props) {
 
     const brands = props.brands;
     
-    useEffect(()=>{
-        console.log("Brands Component useEffect");
-    },[props.brands]);
-    
     return (
         <>
-            {brands.length>0 ? 
+            {(brands && brands.length>0) ? 
             <table className='table table-stripped'>
                 <thead>
                     <tr>
@@ -24,7 +20,7 @@ function Brands(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {brands && brands.length>0 && brands.map((item)=>{
+                    {brands.map((item)=>{
                         return <tr key={item.brandId}>
                             <td>{item.brandId}</td>
                             <td>{item.brandName}</td>

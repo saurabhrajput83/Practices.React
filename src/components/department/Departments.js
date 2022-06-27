@@ -5,14 +5,10 @@ function Departments(props) {
     console.log("Departments Component init", props);
 
     const departments = props.departments;
-    
-    useEffect(()=>{
-        console.log("Departments Component useEffect");
-    },[props.departments]);
-    
+   
     return (
         <>
-            {departments.length>0 ? 
+            {(departments && departments.length>0) ? 
             <table className='table table-stripped'>
                 <thead>
                     <tr>
@@ -24,7 +20,7 @@ function Departments(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {departments && departments.length>0 && departments.map((item)=>{
+                    {departments.map((item)=>{
                         return <tr key={item.departmentId}>
                             <td>{item.departmentId}</td>
                             <td>{item.departmentName}</td>
